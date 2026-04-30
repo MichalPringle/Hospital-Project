@@ -22,4 +22,5 @@ INSERT INTO doctors (doctor_name, specialty) VALUES ('Jayla Whittaker', 'Neurolo
 INSERT INTO doctors (doctor_name, specialty) VALUES ('Steph Curry', 'Orthopaedics');
 INSERT INTO doctors (doctor_name, specialty) VALUES ('Madison Lumley', 'Oncology');
 
-
+ALTER TABLE doctors ADD doctor_email varchar(255); 
+ALTER TABLE doctors ADD doctor_password varchar(255);
