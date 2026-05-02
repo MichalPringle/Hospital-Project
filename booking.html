@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Hospital Management System</title>
+    <link href="Style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="navbar">
+        <ul>
+            <li><a href="homepage.html">Home</a></li>
+            <li><a href="homepage.html#Patientlogin">Patient Login</a></li>
+            <li><a href="homepage.html#Employeelogin">Employee Login</a></li>
+            <li><a href="homepage.html#About">About</a></li>
+        </ul>
+    </div>
+    <h1>Book Appointment</h1>
+    <div class="section">
+        <form>
+            <label>Patient Name:</label>
+            <input type="text" name="name" placeholder="Enter your name">
+
+            <label>Email:</label>
+            <input type="email" name="email" placeholder="Enter your email">
+            <div class="bookingrow">
+                <div class="formgroup">
+                    <label for="clinic">Clinic: </label>
+                    <select name="clinic" id="clinic" onchange="updateDoctors()" required>
+                        <option value="">Select Clinic</option>
+                        <option value="Internal Medicine">Internal Medicine</option>
+                        <option value="Emergency Medicine">Emergency Medicine</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Orthopaedics">Orthopaedics</option>
+                        <option value="Oncology">Oncology</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Physical Therapy">Physical Therapy</option>
+                    </select>
+                </div>
+                <div class="formgroup">
+                    <label for="Doctor">Doctor: </label>
+                    <select name="Doctor" id="Doctor" required>
+                        <option value="">Select Doctor</option>
+                    </select>
+                </div>
+            </div>
+            <label>Appointment Date:</label>
+            <input type="date" id="date" name="Appointment_date" required>
+
+            <label>Appointment Time:</label>
+            <input type="time" id="time" name="Appointment_time" required>
+            <div class="buttongroup">
+                <button type="submit" class="createappt">Create Appointment</button>
+                <button type="reset" class="createappt">Reset Form</button>
+
+            </div>
+    </div>
+    <script>
+        function updateDoctors() {
+            const clinicSelect = document.getElementById("clinic");
+            const doctorSelect = document.getElementById("Doctor");
+            const selectedClinic = clinicSelect.value;
+
+            // Data mapping clinic to doctors
+            const doctorData = {
+                "Cardiology": ["Dr. Janet Smith", "Dr. Mike Bat"],
+                "Pediatrics": ["Dr. Hellen Tray", "Dr. Miami Trish"],
+                "Internal Medicine": ["Dr. Gary Moon", "Dr. Ross Lynch"],
+                "Neurology": ["Dr. Fantadiallo Wena"],
+                "Orthopaedics": ["Dr. Lojay Mude"]
+            };
+
+            //Clear out the current doctor options, incase another option is selected.
+            doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
+
+            //If a user picks a clinic, add the new doctors
+            if (selectedClinic && doctorData[selectedClinic]) {
+                doctorData[selectedClinic].forEach(doctor => {
+                    let option = document.createElement("option");
+                    option.value = doctor;
+                    option.textContent = doctor;
+                    doctorSelect.appendChild(option); //Add selected option to dropdown box
+                });
+            }
+        }
+    </script>
+
+</body>
