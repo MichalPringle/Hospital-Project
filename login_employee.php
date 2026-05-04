@@ -26,7 +26,7 @@ try {
 
     if($doctor) {
 
-         if($passFromForm == $doctor['doctor_password']) {
+         if(password_verify($passFromForm, $doctor['doctor_password'])) {
 
             $_SESSION['doctor_id'] = $doctor['doctor_id'];
             $_SESSION['doctor_name'] = $doctor['doctor_name'];
