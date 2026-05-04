@@ -1,45 +1,44 @@
 <?php
-
-//start a session
 session_start();
 
-//run connection in this file
 require_once 'db_connect.php';
 
-//capture the following area from form html
-$emailFromForm = $_POST['email'];
-$passFromForm = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-//sql query blueprint
-$sql = "SELECT patient_id, patient_name, patient_password FROM patients WHERE email = :email";
+    // Capture the data from the form
+    $emailFromForm = $_POST['email'] ?? ''; 
+    $passFromForm = $_POST['password'] ?? '';
 
+    // SQL query 
+    $sql = "SELECT patient_id, patient_name, patient_password FROM patients WHERE patient_email = :email";
 
-try {
-    //prepare query
-    $stmt = $dbh->prepare($sql);
+    try {
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(['email' => $emailFromForm]);
+        $patient = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    //execute the query
-    $stmt->execute(['email' => $emailFromForm]);
+        if ($patient) {
+            if (password_verify($passFromForm, $patient['patient_password'])) {
+                
+                $_SESSION['patient_id'] = $patient['patient_id']; 
+                $_SESSION['patient_name'] = $patient['patient_name'];
+                $_SESSION['role'] = 'patient';
 
-    //grab the result, in ASSOC 
-    $patient = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if($patient) {
-
-         if(password_verify($passFromForm, $patient['patient_password'])) {
-
-            $_SESSION['patient_id'] = $patient['patient_id'];
-            $_SESSION['patient_name'] = $patient['patient_name'];
-
-            echo "Login successfully! Welcome " . $patient['patient_name'];
+                header("Location: booking.php");
+                exit();
+            } else {
+                echo "Invalid password.";
+            }
         } else {
-            echo "Invalid password.";
+            echo "No account found with that email.";
         }
-    } else {
-        echo "No account found with that email";
+    } catch (PDOException $e) {
+        die("Query failed : " . $e->getMessage());
     }
 
-}catch (PDOException $e) {
-    die("Query failed : " . $e->getMessage());
+} else {
+
+    header("Location: homepage.html");
+    exit();
 }
 ?>

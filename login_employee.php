@@ -1,45 +1,49 @@
 <?php
-
-//start a session
 session_start();
-
-//run connection in this file
 require_once 'db_connect.php';
 
-//capture the following area from form html
-$emailFromForm = $_POST['email'];
-$passFromForm = $_POST['password'];
 
-//sql query blueprint
-$sql = "SELECT doctor_id, doctor_name, doctor_password FROM doctors WHERE doctor_email = :email";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    
+    $emailFromForm = $_POST['email'] ?? '';
+    $passFromForm  = $_POST['password'] ?? '';
 
+    /
+    $sql = "SELECT doctor_id, doctor_name, doctor_password 
+            FROM doctors 
+            WHERE doctor_email = :email";
 
-try {
-    //prepare query
-    $stmt = $dbh->prepare($sql);
+    try {
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(['email' => $emailFromForm]);
+        $doctor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    //execute the query
-    $stmt->execute(['email' => $emailFromForm]);
+        //Verify User
+        if ($doctor) {
+            // Check if the hashed password matches
+            if (password_verify($passFromForm, $doctor['doctor_password'])) {
+                
+            
+                $_SESSION['doctor_id']      = $doctor['doctor_id'];
+                $_SESSION['logged_in_user'] = $doctor['doctor_name'];
+                $_SESSION['role']           = 'employee'; 
 
-    //grab the result, in ASSOC 
-    $doctor = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if($doctor) {
-
-         if(password_verify($passFromForm, $doctor['doctor_password'])) {
-
-            $_SESSION['doctor_id'] = $doctor['doctor_id'];
-            $_SESSION['doctor_name'] = $doctor['doctor_name'];
-
-            echo "Login successfully! Welcome Dr. " . $doctor['doctor_name'];
+                echo "Login successfully! Welcome Dr. " . $doctor['doctor_name'];
+                
+                // might implement: redirect to dashboard
+                // header("Location: doctor_dashboard.php");
+                // exit();
+                
+            } else {
+                echo "Invalid password.";
+            }
         } else {
-            echo "Invalid password.";
+            echo "No account found with that email.";
         }
-    } else {
-        echo "No account found with that email";
+    } catch (PDOException $e) {
+        // Log error and stop execution
+        die("Query failed: " . $e->getMessage());
     }
-
-}catch (PDOException $e) {
-    die("Query failed : " . $e->getMessage());
 }
 ?>

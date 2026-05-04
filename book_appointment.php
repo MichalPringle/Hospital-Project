@@ -1,33 +1,54 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'patient') {
-    // Kick them to the patient login
-    header("Location: patient_login.php");
+// Security Check
+if (!isset($_SESSION['patient_id']) || $_SESSION['role'] !== 'patient') {
+    header("Location: login_patient.php");
     exit();
 }
 
 include "db_connect.php";
 
-$patient_id = $_SESSION['patient_id']; 
+//Only run if form was submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-$doctor_id = $_POST['doctor_id'];
-$appt_date = $_POST['appt_date'];
+    // Capture from Session
+    $patient_id = $_SESSION['patient_id']; 
 
-$sql = "INSERT INTO appointments (patient_id, doctor_id, appt_date)
-         VALUES (:patient_id, :doctor_id, :appt_date)";
+    // Capture from Form 
+    $doctor_name = $_POST['Doctor'] ?? '';
+    $appt_date   = $_POST['Appointment_date'] ?? '';
+    $appt_time   = $_POST['Appointment_time'] ?? '';
 
-$stmt = $dbh->prepare($sql);
+    try {
+        //Find the ID for the name "Dr. XXX"
+        $docLookup = $dbh->prepare("SELECT doctor_id FROM doctors WHERE doctor_name = :name");
+        $docLookup->execute(['name' => $doctor_name]);
+        $doctor = $docLookup->fetch(PDO::FETCH_ASSOC);
 
-$success = $stmt->execute([
-    'patient_id' => $patient_id,
-    'doctor_id' => $doctor_id,
-    'appt_date' => $appt_date
-]);
+        if ($doctor) {
+            $doctor_id = $doctor['doctor_id'];
 
-if ($success) {
-    echo "Appointment booked successfully!";
-} else {
-    echo "Error booking appointment.";
+            // add appt time
+            $sql = "INSERT INTO appointments (patient_id, doctor_id, appt_date, appt_time)
+                    VALUES (:p_id, :d_id, :a_date, :a_time)";
+
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute([
+                'p_id'   => $patient_id,
+                'd_id'   => $doctor_id,
+                'a_date' => $appt_date,
+                'a_time' => $appt_time
+            ]);
+
+            echo "<h2>Appointment booked successfully!</h2>";
+            echo "<a href='booking.php'>Book another</a>";
+        } else {
+            echo "Error: Doctor not found in database.";
+        }
+
+    } catch (PDOException $e) {
+        die("Database error: " . $e->getMessage());
+    }
 }
 ?>
