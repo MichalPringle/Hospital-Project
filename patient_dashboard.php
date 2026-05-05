@@ -37,7 +37,7 @@ try {
 
     <div class="navbar">
         <ul>
-            <li><a href="homepage.html">Home</a></li>
+            <li><a href="Homepage.html">Home</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
