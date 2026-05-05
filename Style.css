@@ -144,7 +144,7 @@ hr {
 
 }
 
-/* 2. The White Box in the Center */
+/*The White Box in the Center */
 .modal-content {
     background-color: white;
     margin: 5% auto;
@@ -158,7 +158,7 @@ hr {
     /* Adds a subtle shadow */
 }
 
-/* 3. The 'X' Close Button */
+/* The 'X' Close Button */
 .close {
     float: right;
     font-size: 28px;
@@ -189,7 +189,7 @@ hr {
     margin-top: 15px;
 }
 
-/* This keeps the 'Remember me' checkbox and label on the same line */
+/* This keeps the Remember me checkbox and label on the same line */
 .modal-content input[type="checkbox"] {
     display: inline-block;
     width: auto;
