@@ -42,7 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
 
             echo "<h2>Appointment booked successfully!</h2>";
-            echo "<a href='booking.php'>Book another</a>";
+            echo "<p><a href='booking.php'>Book another</a></p>";
+            echo "<p><a href='patient_dashboard.php'>Return to dashboard</a></p>";
         } else {
             echo "Error: Doctor not found in database.";
         }
