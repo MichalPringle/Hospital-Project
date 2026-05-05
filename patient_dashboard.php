@@ -3,7 +3,7 @@ session_start();
 
 // check security 
 if (!isset($_SESSION['patient_id']) || $_SESSION['role'] !== 'patient') {
-    header("Location: homepage.html");
+    header("Location: Homepage.html");
     exit();
 }
 
