@@ -201,7 +201,6 @@ input {
     margin: 0 auto 15px auto;
     /* auto centers the box */
     width: 80%;
-    /* controls box size and adds space below it */
     padding: 10px;
     box-sizing: border-box;
 }
