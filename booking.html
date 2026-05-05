@@ -76,7 +76,7 @@
             //Clear out the current doctor options, incase another option is selected.
             doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
 
-            //If a user picks a clinic, add the new doctors
+            //If a user picks a clinic, add there are doctors
             if (selectedClinic && doctorData[selectedClinic]) {
                 doctorData[selectedClinic].forEach(doctor => {
                     let option = document.createElement("option");
