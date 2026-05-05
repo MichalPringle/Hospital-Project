@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "No account found with that email.";
         }
     } catch (PDOException $e) {
-        // Log error and stop execution
+        // Log error
         die("Query failed: " . $e->getMessage());
     }
 }

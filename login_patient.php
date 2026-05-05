@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['patient_name'] = $patient['patient_name'];
                 $_SESSION['role'] = 'patient';
 
-                header("Location: booking.php");
+                header("Location: patient_dashboard.php");
                 exit();
             } else {
                 echo "Invalid password.";
