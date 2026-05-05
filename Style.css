@@ -176,9 +176,7 @@ hr {
     display: block;
     /* Forces onto a new line */
     width: 80%;
-    /* Makes them full width */
     margin: 0 auto;
-    /* Adds space between the fields */
     padding-bottom: 5px;
     /* Makes the input boxes taller and easier to type in */
     box-sizing: border-box;
