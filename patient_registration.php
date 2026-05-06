@@ -1,8 +1,7 @@
 <?php 
 session_start(); 
 include "db_connect.php"; 
-header("Content-Type: application/json"); 
-
+ 
 if ($_SERVER["REQUEST_METHOD"] === "POST") { 
     $name = $_POST['patient_name'] ?? null; 
     $email = $_POST['patient_email'] ?? null; 
@@ -30,7 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'pass'  => $hashedPassword
         ]);
 
-        echo json_encode(["status" => "success", "message" => "Registration successful."]); 
+        header("Location: Homepage.html");    // Redirects user back to homepage upon successful registration
+        exit(); 
     } catch (PDOException $e) { 
         echo json_encode(["status" => "error", "message" => "DB Error: " . $e->getMessage()]); 
     } 
